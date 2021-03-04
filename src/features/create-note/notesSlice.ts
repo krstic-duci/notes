@@ -2,31 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { uniqueId } from "../../utils/helpers";
 
-interface Notes {
-  [notes: string]: Note[];
-}
-
-interface NotePayload {
-  categoryName: string;
-  noteTextVal: string;
-}
-
-interface deleteNotePayload {
-  categoryName: string;
-  itemId: number;
-}
-
-interface editNotePayload {
-  categoryName: string;
-  itemId: number;
-  editedVal: string;
-}
-
-export interface Note {
-  id: number;
-  text: string;
-  isChecked: boolean;
-}
+// Types
+import {
+  Notes,
+  NotePayload,
+  deleteNotePayload,
+  editNotePayload,
+} from "../../utils/types";
 
 const initialState = {
   categories: {} as Notes,
@@ -36,14 +18,17 @@ export const notesSlice = createSlice({
   name: "notes",
   initialState,
   reducers: {
-    addNewCategory: (state, action: PayloadAction<string>) => {
-      state.categories[action.payload] = [];
+    addNewCategory: (state, { payload }: PayloadAction<string>) => {
+      state.categories[payload] = [];
     },
     addCategoryNote: {
-      reducer: (state, action: PayloadAction<NotePayload>) => {
-        state.categories[action.payload.categoryName].push({
+      reducer: (
+        state,
+        { payload: { categoryName, noteTextVal } }: PayloadAction<NotePayload>
+      ) => {
+        state.categories[categoryName].push({
           id: uniqueId(),
-          text: action.payload.noteTextVal,
+          text: noteTextVal,
           isChecked: false,
         });
       },
@@ -57,12 +42,13 @@ export const notesSlice = createSlice({
       },
     },
     deleteCategoryNote: {
-      reducer: (state, action: PayloadAction<deleteNotePayload>) => {
-        console.log(action.payload);
-
-        state.categories[action.payload.categoryName] = state.categories[
-          action.payload.categoryName
-        ].filter((elem) => elem.id !== action.payload.itemId);
+      reducer: (
+        state,
+        { payload: { categoryName, itemId } }: PayloadAction<deleteNotePayload>
+      ) => {
+        state.categories[categoryName] = state.categories[categoryName].filter(
+          (elem) => elem.id !== itemId
+        );
       },
       prepare: (categoryName: string, itemId: number) => {
         return {
@@ -74,12 +60,18 @@ export const notesSlice = createSlice({
       },
     },
     editCategoryNote: {
-      reducer: (state, action: PayloadAction<editNotePayload>) => {
-        const editElem = state.categories[action.payload.categoryName].find(
-          (elem) => elem.id === action.payload.itemId
+      reducer: (
+        state,
+        {
+          payload: { categoryName, itemId, editedVal },
+        }: PayloadAction<editNotePayload>
+      ) => {
+        // FIXME: make util function
+        const editElem = state.categories[categoryName].find(
+          (elem) => elem.id === itemId
         );
         if (editElem) {
-          editElem.text = action.payload.editedVal;
+          editElem.text = editedVal;
         }
       },
       prepare: (categoryName: string, itemId: number, editedVal: string) => {
@@ -88,6 +80,29 @@ export const notesSlice = createSlice({
             categoryName,
             itemId,
             editedVal,
+          },
+        };
+      },
+    },
+    // FIXME: change type PayloadAction
+    updateCheckedNote: {
+      reducer: (
+        state,
+        { payload: { categoryName, itemId } }: PayloadAction<deleteNotePayload>
+      ) => {
+        // FIXME: make util function
+        const elem = state.categories[categoryName].find(
+          (elem) => elem.id === itemId
+        );
+        if (elem) {
+          elem.isChecked = !elem.isChecked;
+        }
+      },
+      prepare: (categoryName: string, itemId: number) => {
+        return {
+          payload: {
+            categoryName,
+            itemId,
           },
         };
       },
@@ -101,6 +116,7 @@ export const {
   addCategoryNote,
   deleteCategoryNote,
   editCategoryNote,
+  updateCheckedNote,
 } = notesSlice.actions;
 
 // Selectors

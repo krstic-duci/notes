@@ -1,10 +1,15 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import {
-  Note,
   deleteCategoryNote,
   editCategoryNote,
+  updateCheckedNote,
 } from "../features/create-note/notesSlice";
+
+// Types
+import { Note } from "../utils/types";
 
 function NoteItem({
   note: { id, text, isChecked },
@@ -14,50 +19,45 @@ function NoteItem({
   categoryName: string;
 }) {
   const dispatch = useDispatch();
-  // const changeCheckedState = (itemId: string) => {
-  //   let checkedNotes = notesList?.map((elem) => {
-  //     if (elem.notes.id === itemId) {
-  //       elem.notes.isChecked = true;
-  //     }
-  //     return elem;
-  //   });
-  //   setNotesList(checkedNotes);
-  //   console.log(checkedNotes);
-  // };
+
+  const changeCheckedState = (itemId: number) => () => {
+    dispatch(updateCheckedNote(categoryName, itemId));
+  };
+
   const deleteNoteById = (categoryName: string, itemId: number) => () => {
-    console.log(`delete note with id: ${itemId} clicked`);
     dispatch(deleteCategoryNote(categoryName, itemId));
   };
 
-  const editNoteById = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    itemId: number
-  ) => {
-    console.log(`Editing note with ID: ${itemId} with text: ${e.target.value}`);
+  // based on: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/16208
+  // could cast e.target.value to string also
+  const editNoteById = (e: React.BaseSyntheticEvent, itemId: number) => {
     dispatch(editCategoryNote(categoryName, itemId, e.target.value));
   };
+
   return (
-    <div style={{ display: "flex", alignItems: "baseline" }}>
-      {/* <input
-        type="checkbox"
-        checked={isChecked}
-        onChange={() => changeCheckedState(id)}
-      /> */}
-      <p style={{ width: "300px", marginLeft: "10px" }}>
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => editNoteById(e, id)}
-          style={{ border: 0, outline: 0 }}
+    <Form className="my-2 d-flex align-items-baseline">
+      <Form.Group className="d-flex">
+        <Form.Control
+          size="sm"
+          type="checkbox"
+          checked={isChecked}
+          onChange={changeCheckedState(id)}
         />
-      </p>
-      <button
-        onClick={deleteNoteById(categoryName, id)}
-        style={{ marginLeft: "10px" }}
-      >
-        Delete
-      </button>
-    </div>
+
+        <p style={{ width: "300px", marginLeft: "10px" }}>
+          <Form.Control
+            type="text"
+            value={text}
+            onChange={(e) => editNoteById(e, id)}
+            style={{ border: 0, outline: 0 }}
+          />
+        </p>
+
+        <Button onClick={deleteNoteById(categoryName, id)} className="ml-2">
+          Delete
+        </Button>
+      </Form.Group>
+    </Form>
   );
 }
 

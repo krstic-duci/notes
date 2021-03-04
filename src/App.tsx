@@ -2,9 +2,9 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { ArrowRightSquareFill } from "react-bootstrap-icons";
 import NotesCreateModal from "./components/NotesCreateModal";
 import NotesSearch from "./components/NotesSearch";
-import { ArrowRightSquareFill } from "react-bootstrap-icons";
 import NotesCategory from "./components/NotesCategory";
 
 function App() {
@@ -32,7 +32,6 @@ function App() {
 
       <Row>
         <Col>
-          Here I should add Notes categories with todo or search results
           <NotesCategory />
         </Col>
       </Row>
