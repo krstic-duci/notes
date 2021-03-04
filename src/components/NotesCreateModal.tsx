@@ -5,14 +5,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import { addNewCategory } from "../features/add-note/notesSlice";
-import { uniqueId } from "../utils/helpers";
-
-interface Note {
-  id: string;
-  text: string;
-  isChecked: boolean;
-}
+import { addNewCategory } from "../features/create-note/notesSlice";
 
 function CreateNoteModal() {
   const dispatch = useDispatch();
@@ -35,15 +28,7 @@ function CreateNoteModal() {
   };
 
   const createNewNote = () => {
-    // FIXME: only for showcase - needs to be changed
-    const newNote = {
-      [categoryName]: {
-        id: `notes_${uniqueId()}`,
-        text: "",
-        isChecked: false,
-      },
-    };
-    dispatch(addNewCategory(newNote));
+    dispatch(addNewCategory(categoryName));
 
     setOpenModal(false);
   };

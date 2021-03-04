@@ -14,7 +14,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import notesReducer from "../features/add-note/notesSlice";
+import notesReducer from "../features/create-note/notesSlice";
 
 const persistConfig = {
   key: "root",
