@@ -13,7 +13,7 @@ export interface NotePayload {
   noteTextVal: string;
 }
 
-export interface deleteNotePayload {
+export interface categoryAndCheckNotePayload {
   categoryName: string;
   itemId: number;
 }
@@ -22,4 +22,10 @@ export interface editNotePayload {
   categoryName: string;
   itemId: number;
   editedVal: string;
+}
+
+export interface moveNoteFromToPayload {
+  note: Note;
+  moveFrom: string;
+  moveTo: string;
 }

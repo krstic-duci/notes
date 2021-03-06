@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Col from "react-bootstrap/Col";
+import { PlusSquareFill } from "react-bootstrap-icons";
 import { addCategoryNote } from "../features/create-note/notesSlice";
 
 interface NoteFormProps {
@@ -34,25 +36,28 @@ function NoteForm({ categoryName }: NoteFormProps) {
   };
   return (
     <Form className="mt-4">
-      <Form.Group className="d-flex">
-        <Form.Control
-          type="text"
-          placeholder="Add things to do..."
-          value={inputVal}
-          onChange={inputValHandler}
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
-            addNoteKeyPress(e, categoryName)
-          }
-        />
-        <Button
-          onClick={addCategoryNewNote(categoryName)}
-          disabled={inputVal.length === 0}
-          variant={inputVal.length === 0 ? "secondary" : "primary"}
-          className="ml-2"
-        >
-          Add
-        </Button>
-      </Form.Group>
+      <Form.Row>
+        <Col className="col-sm-10">
+          <Form.Control
+            type="text"
+            placeholder="Add things to do..."
+            value={inputVal}
+            onChange={inputValHandler}
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+              addNoteKeyPress(e, categoryName)
+            }
+          />
+        </Col>
+        <Col className="col-sm-2 text-right">
+          <Button
+            onClick={addCategoryNewNote(categoryName)}
+            disabled={inputVal.length === 0}
+            variant={inputVal.length === 0 ? "secondary" : "primary"}
+          >
+            <PlusSquareFill />
+          </Button>
+        </Col>
+      </Form.Row>
     </Form>
   );
 }

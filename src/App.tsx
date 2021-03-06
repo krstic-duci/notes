@@ -3,9 +3,9 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { ArrowRightSquareFill } from "react-bootstrap-icons";
-import NotesCreateModal from "./components/NotesCreateModal";
+import CreateCategoryModal from "./create-category/CreateCategoryModal";
 import NotesSearch from "./components/NotesSearch";
-import NotesCategory from "./components/NotesCategory";
+import NoteList from "./add-note/NoteList";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         <Col className="text-center">
           Start by creating your things{" "}
           <ArrowRightSquareFill className="mx-2" />
-          <NotesCreateModal />
+          <CreateCategoryModal />
         </Col>
       </Row>
 
@@ -32,7 +32,7 @@ function App() {
 
       <Row>
         <Col>
-          <NotesCategory />
+          <NoteList />
         </Col>
       </Row>
     </Container>

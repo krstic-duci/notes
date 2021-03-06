@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { uniqueId } from "../../utils/helpers";
-
-// Types
+import { uniqueId, findElemById } from "../../utils/helpers";
 import {
   Notes,
   NotePayload,
-  deleteNotePayload,
+  categoryAndCheckNotePayload,
   editNotePayload,
+  Note,
+  moveNoteFromToPayload,
 } from "../../utils/types";
 
 const initialState = {
@@ -19,7 +19,16 @@ export const notesSlice = createSlice({
   initialState,
   reducers: {
     addNewCategory: (state, { payload }: PayloadAction<string>) => {
+      // TODO: make object categories keys unique and print error msg
+      if (state.categories.hasOwnProperty(payload)) {
+        return;
+      }
       state.categories[payload] = [];
+    },
+    deleteCategory: (state, { payload }: PayloadAction<string>) => {
+      if (state.categories.hasOwnProperty(payload)) {
+        delete state.categories[payload];
+      }
     },
     addCategoryNote: {
       reducer: (
@@ -44,7 +53,9 @@ export const notesSlice = createSlice({
     deleteCategoryNote: {
       reducer: (
         state,
-        { payload: { categoryName, itemId } }: PayloadAction<deleteNotePayload>
+        {
+          payload: { categoryName, itemId },
+        }: PayloadAction<categoryAndCheckNotePayload>
       ) => {
         state.categories[categoryName] = state.categories[categoryName].filter(
           (elem) => elem.id !== itemId
@@ -66,12 +77,9 @@ export const notesSlice = createSlice({
           payload: { categoryName, itemId, editedVal },
         }: PayloadAction<editNotePayload>
       ) => {
-        // FIXME: make util function
-        const editElem = state.categories[categoryName].find(
-          (elem) => elem.id === itemId
-        );
-        if (editElem) {
-          editElem.text = editedVal;
+        const editedElem = findElemById(itemId, state.categories[categoryName]);
+        if (editedElem) {
+          editedElem.text = editedVal;
         }
       },
       prepare: (categoryName: string, itemId: number, editedVal: string) => {
@@ -84,16 +92,14 @@ export const notesSlice = createSlice({
         };
       },
     },
-    // FIXME: change type PayloadAction
     updateCheckedNote: {
       reducer: (
         state,
-        { payload: { categoryName, itemId } }: PayloadAction<deleteNotePayload>
+        {
+          payload: { categoryName, itemId },
+        }: PayloadAction<categoryAndCheckNotePayload>
       ) => {
-        // FIXME: make util function
-        const elem = state.categories[categoryName].find(
-          (elem) => elem.id === itemId
-        );
+        const elem = findElemById(itemId, state.categories[categoryName]);
         if (elem) {
           elem.isChecked = !elem.isChecked;
         }
@@ -107,16 +113,30 @@ export const notesSlice = createSlice({
         };
       },
     },
+    moveNoteFromTo: {
+      reducer: (state, action: PayloadAction<moveNoteFromToPayload>) => {},
+      prepare: (note: Note, moveFrom: string, moveTo: string) => {
+        return {
+          payload: {
+            note,
+            moveFrom,
+            moveTo,
+          },
+        };
+      },
+    },
   },
 });
 
 // Actions
 export const {
   addNewCategory,
+  deleteCategory,
   addCategoryNote,
   deleteCategoryNote,
   editCategoryNote,
   updateCheckedNote,
+  moveNoteFromTo,
 } = notesSlice.actions;
 
 // Selectors
