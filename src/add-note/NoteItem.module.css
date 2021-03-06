@@ -1,0 +1,5 @@
+.note__container__input {
+  font-size: 25px !important; /*just for the sake of a demo*/
+  border: 0 !important; /*just for the sake of a demo*/
+  outline: 0 ;
+}

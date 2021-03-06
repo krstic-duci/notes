@@ -1,16 +1,23 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import FormControl from "react-bootstrap/FormControl";
-import { Search } from "react-bootstrap-icons";
+import { Search, XSquare } from "react-bootstrap-icons";
+import { filterThroughCategories } from "../features/create-note/notesSlice";
 
 function NotesSearch() {
+  const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
 
   const addSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    // TODO: add redux action for a search query, then loop through the entire array of notes
-    // and display the search results
+    dispatch(filterThroughCategories(e.target.value));
+  };
+
+  const defaultSearchVal = () => {
+    setSearchQuery("");
+    dispatch(filterThroughCategories(""));
   };
   return (
     <>
@@ -27,6 +34,11 @@ function NotesSearch() {
           value={searchQuery}
           onChange={addSearchQuery}
         />
+        <InputGroup.Append id="basic-addon2" onClick={defaultSearchVal}>
+          <InputGroup.Text>
+            <XSquare />
+          </InputGroup.Text>
+        </InputGroup.Append>
         {/* TODO: button should be disabled if length of a search field is 0 */}
         <Button
           className="ml-2"

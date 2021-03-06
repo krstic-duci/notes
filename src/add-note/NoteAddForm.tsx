@@ -35,7 +35,7 @@ function NoteForm({ categoryName }: NoteFormProps) {
     setInputVal(e.target.value);
   };
   return (
-    <Form className="mt-4">
+    <Form className="mt-auto" onSubmit={(e) => e.preventDefault()}>
       <Form.Row>
         <Col className="col-sm-10">
           <Form.Control

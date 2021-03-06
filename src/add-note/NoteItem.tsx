@@ -10,8 +10,10 @@ import {
   deleteCategoryNote,
   editCategoryNote,
   updateCheckedNote,
+  moveNoteFromTo,
 } from "../features/create-note/notesSlice";
 import { Note, Notes } from "../utils/types";
+import styles from "./NoteItem.module.css";
 
 function NoteItem({
   note,
@@ -24,16 +26,16 @@ function NoteItem({
 }) {
   const dispatch = useDispatch();
 
-  const changeCheckedState = (itemId: number) => () => {
+  const changeCheckedState = (itemId: string) => () => {
     dispatch(updateCheckedNote(categoryName, itemId));
   };
 
-  const deleteNoteById = (categoryName: string, itemId: number) => () => {
+  const deleteNoteById = (categoryName: string, itemId: string) => () => {
     dispatch(deleteCategoryNote(categoryName, itemId));
   };
 
   // based on: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/16208
-  const editNoteById = (e: React.BaseSyntheticEvent, itemId: number) => {
+  const editNoteById = (e: React.BaseSyntheticEvent, itemId: string) => {
     dispatch(editCategoryNote(categoryName, itemId, e.target.value));
   };
 
@@ -42,15 +44,12 @@ function NoteItem({
     moveFrom: string,
     moveTo: string
   ) => () => {
-    // FIXME: should component re-render when I click on this dropdown btn
-    console.log(
-      `Need to move ${JSON.stringify(note)} from ${moveFrom} to ${moveTo}`
-    );
+    dispatch(moveNoteFromTo(note, moveFrom, moveTo));
   };
 
   return (
-    <Form>
-      <Form.Row className="align-items-center my-3">
+    <Form onSubmit={(e) => e.preventDefault()}>
+      <Form.Row className="align-items-center my-1">
         <Col className="col-sm-1">
           <Form.Control
             size="sm"
@@ -62,16 +61,20 @@ function NoteItem({
 
         <Col className="col-sm-6">
           <Form.Control
+            className={styles.note__container__input}
             type="text"
             value={note.text}
             onChange={(e) => editNoteById(e, note.id)}
-            style={{ border: 0, outline: 0 }}
           />
         </Col>
 
         <Col className="col-sm-3">
           {Object.keys(categories).length > 1 ? (
-            <DropdownButton title="Move into..." variant="outline-info">
+            <DropdownButton
+              title="Move into..."
+              variant="outline-info"
+              className="text-muted"
+            >
               {Object.keys(categories)
                 .filter((elemName) => elemName !== categoryName)
                 .map((categoryDropdown, categoryDropdownId) => {

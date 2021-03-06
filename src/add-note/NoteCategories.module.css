@@ -1,0 +1,20 @@
+.note__container {
+  font-family: "Indie Flower", cursive;
+}
+
+.note__container > div {
+  box-shadow: 0 0 8px #ccc;
+  position: relative;
+  top: 0;
+  transition: top 0.15s ease-in;
+}
+
+.note__container > div:hover {
+  box-shadow: 0 0 15px #ccc;
+  top: -5px;
+}
+
+.note__container__para {
+  font-size: 30px;
+  font-weight: bold;
+}

@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { uniqueId, findElemById } from "../../utils/helpers";
+import { v4 as uuidv4 } from "uuid";
+import { findElemById } from "../../utils/helpers";
 import {
-  Notes,
+  StateStore,
   NotePayload,
   categoryAndCheckNotePayload,
   editNotePayload,
@@ -10,8 +11,10 @@ import {
   moveNoteFromToPayload,
 } from "../../utils/types";
 
-const initialState = {
-  categories: {} as Notes,
+const initialState: StateStore = {
+  categories: {},
+  error: null,
+  filteredCategories: [],
 };
 
 export const notesSlice = createSlice({
@@ -36,7 +39,7 @@ export const notesSlice = createSlice({
         { payload: { categoryName, noteTextVal } }: PayloadAction<NotePayload>
       ) => {
         state.categories[categoryName].push({
-          id: uniqueId(),
+          id: uuidv4(),
           text: noteTextVal,
           isChecked: false,
         });
@@ -61,7 +64,7 @@ export const notesSlice = createSlice({
           (elem) => elem.id !== itemId
         );
       },
-      prepare: (categoryName: string, itemId: number) => {
+      prepare: (categoryName: string, itemId: string) => {
         return {
           payload: {
             categoryName,
@@ -82,7 +85,7 @@ export const notesSlice = createSlice({
           editedElem.text = editedVal;
         }
       },
-      prepare: (categoryName: string, itemId: number, editedVal: string) => {
+      prepare: (categoryName: string, itemId: string, editedVal: string) => {
         return {
           payload: {
             categoryName,
@@ -99,12 +102,15 @@ export const notesSlice = createSlice({
           payload: { categoryName, itemId },
         }: PayloadAction<categoryAndCheckNotePayload>
       ) => {
-        const elem = findElemById(itemId, state.categories[categoryName]);
-        if (elem) {
-          elem.isChecked = !elem.isChecked;
+        const elemToUpdateCheckbox = findElemById(
+          itemId,
+          state.categories[categoryName]
+        );
+        if (elemToUpdateCheckbox) {
+          elemToUpdateCheckbox.isChecked = !elemToUpdateCheckbox.isChecked;
         }
       },
-      prepare: (categoryName: string, itemId: number) => {
+      prepare: (categoryName: string, itemId: string) => {
         return {
           payload: {
             categoryName,
@@ -114,7 +120,19 @@ export const notesSlice = createSlice({
       },
     },
     moveNoteFromTo: {
-      reducer: (state, action: PayloadAction<moveNoteFromToPayload>) => {},
+      reducer: (
+        state,
+        {
+          payload: { note, moveFrom, moveTo },
+        }: PayloadAction<moveNoteFromToPayload>
+      ) => {
+        const elemMoveFromIdx = state.categories[moveFrom]
+          .map((elem) => elem.id === note.id)
+          .indexOf(true);
+
+        state.categories[moveTo].push(note);
+        state.categories[moveFrom].splice(elemMoveFromIdx, 1);
+      },
       prepare: (note: Note, moveFrom: string, moveTo: string) => {
         return {
           payload: {
@@ -124,6 +142,25 @@ export const notesSlice = createSlice({
           },
         };
       },
+    },
+    filterThroughCategories: (state, { payload }: PayloadAction<string>) => {
+      if (!payload) {
+        state.filteredCategories = [];
+        return;
+      }
+      let newFilterCategories: Note[] = [];
+
+      Object.values(state.categories).forEach((categoryArray) => {
+        const filteredCategoryArray = categoryArray.filter((note) =>
+          note.text.includes(payload)
+        );
+        newFilterCategories = [
+          ...newFilterCategories,
+          ...filteredCategoryArray,
+        ];
+      });
+
+      state.filteredCategories = newFilterCategories;
     },
   },
 });
@@ -137,9 +174,13 @@ export const {
   editCategoryNote,
   updateCheckedNote,
   moveNoteFromTo,
+  filterThroughCategories,
 } = notesSlice.actions;
 
 // Selectors
 export const selectNotes = (state: RootState) => state.categories;
+export const selectError = (state: RootState) => state.error;
+export const selectFilteredCategories = (state: RootState) =>
+  state.filteredCategories;
 
 export default notesSlice.reducer;
