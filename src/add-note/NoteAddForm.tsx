@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import { PlusSquareFill } from "react-bootstrap-icons";
+
+// Redux slice
 import { addCategoryNote } from "../features/create-note/notesSlice";
 
 interface NoteFormProps {
@@ -12,9 +14,12 @@ interface NoteFormProps {
 
 function NoteForm({ categoryName }: NoteFormProps) {
   const dispatch = useDispatch();
+
   const [inputVal, setInputVal] = useState("");
 
   const addCategoryNewNote = (categoryName: string) => () => {
+    console.log("is called");
+
     dispatch(addCategoryNote(categoryName, inputVal));
     setInputVal("");
   };
@@ -24,16 +29,18 @@ function NoteForm({ categoryName }: NoteFormProps) {
     categoryName: string
   ) => {
     if (e.key === "Enter") {
-      dispatch(addCategoryNote(categoryName, inputVal));
-      setInputVal("");
+      // dispatch(addCategoryNote(categoryName, inputVal));
+      // setInputVal("");
       // FIXME: function below is not working
-      // addCategoryNewNote(categoryName);
+      console.log("called");
+      addCategoryNewNote(categoryName);
     }
   };
 
   const inputValHandler = (e: React.BaseSyntheticEvent) => {
     setInputVal(e.target.value);
   };
+
   return (
     <Form className="mt-auto" onSubmit={(e) => e.preventDefault()}>
       <Form.Row>
@@ -48,6 +55,7 @@ function NoteForm({ categoryName }: NoteFormProps) {
             }
           />
         </Col>
+
         <Col className="col-sm-2 text-right">
           <Button
             onClick={addCategoryNewNote(categoryName)}

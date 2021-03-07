@@ -5,10 +5,13 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
+
+// Redux slice
 import { addNewCategory } from "../features/create-note/notesSlice";
 
 function CreateNoteModal() {
   const dispatch = useDispatch();
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [openModal, setOpenModal] = useState(false);
   const [categoryName, setCategoryName] = useState("");

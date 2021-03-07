@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { v4 as uuidv4 } from "uuid";
+
+// Utils/Types
 import { findElemById } from "../../utils/helpers";
 import {
   StateStore,
@@ -13,7 +15,6 @@ import {
 
 const initialState: StateStore = {
   categories: {},
-  error: null,
   filteredCategories: [],
 };
 
@@ -22,13 +23,20 @@ export const notesSlice = createSlice({
   initialState,
   reducers: {
     addNewCategory: (state, { payload }: PayloadAction<string>) => {
-      // TODO: make object categories keys unique and print error msg
+      // Disclaimer:
+      // In here I just stopped the addition of a new Category with the same key name.
+      // Better solution would be to have an error so user can be notified, but I felt
+      // that any user action should have the same behaviour which unfortunately I didn't
+      // have time to implement
       if (state.categories.hasOwnProperty(payload)) {
         return;
       }
       state.categories[payload] = [];
     },
     deleteCategory: (state, { payload }: PayloadAction<string>) => {
+      // Disclaimer:
+      // Better solution would be to show a modal to the user confirming his action, but
+      // for a sake of a demo I didn't implemented it
       if (state.categories.hasOwnProperty(payload)) {
         delete state.categories[payload];
       }
@@ -179,7 +187,6 @@ export const {
 
 // Selectors
 export const selectNotes = (state: RootState) => state.categories;
-export const selectError = (state: RootState) => state.error;
 export const selectFilteredCategories = (state: RootState) =>
   state.filteredCategories;
 

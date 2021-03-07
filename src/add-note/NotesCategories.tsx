@@ -2,9 +2,15 @@ import React from "react";
 import { useSelector } from "react-redux";
 import Alert from "react-bootstrap/Alert";
 import { Lightbulb } from "react-bootstrap-icons";
+
+// Components
 import NotesCategory from "./NotesCategory";
+
+// Redux slice
 import { selectNotes } from "../features/create-note/notesSlice";
-import styles from "./NoteCategories.module.css";
+
+// Style
+import styles from "./NotesCategories.module.css";
 
 function NoteCategories() {
   const categories = useSelector(selectNotes);
@@ -19,7 +25,6 @@ function NoteCategories() {
             {Object.keys(categories).map((categoryNameTag, categoryTagId) => {
               return (
                 <div key={`tags-${categoryTagId}`} className="mr-3">
-                  {/* FIXME: check useRef() and scrollIntoView */}
                   <a
                     href={`#${categoryNameTag}`}
                     role="button"
@@ -33,15 +38,13 @@ function NoteCategories() {
           </section>
           <Alert variant="info" className="d-flex align-items-center">
             <Lightbulb />
-            <span className="mx-2">
-              Pro tip: Click on a note text to edit it!
-            </span>
+            <span className="mx-2">Tip: Click on a note text to edit it!</span>
           </Alert>
         </>
       ) : null}
 
       <section
-        className={`${styles.note__container} d-flex justify-content-between flex-wrap`}
+        className={`${styles.category__container} d-flex justify-content-between flex-wrap`}
       >
         {Object.keys(categories).map((categoryName, categoryId) => {
           return (

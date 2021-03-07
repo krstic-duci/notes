@@ -5,13 +5,20 @@ import Button from "react-bootstrap/Button";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { ThreeDots, Trash } from "react-bootstrap-icons";
+
+// Components
 import NoteAddForm from "./NoteAddForm";
 import NoteItem from "./NoteItem";
 import NoteSearchForm from "../components/NoteSearchForm";
+
+// Redux slice
 import {
   deleteCategory,
   selectNotes,
 } from "../features/create-note/notesSlice";
+
+// Style
+import styles from "./NotesCategory.module.css";
 
 interface NotesCategoryProps {
   categoryName: string;
@@ -19,8 +26,9 @@ interface NotesCategoryProps {
 }
 
 function NotesCategory({ categoryName, categoryId }: NotesCategoryProps) {
-  const categories = useSelector(selectNotes);
   const dispatch = useDispatch();
+  const categories = useSelector(selectNotes);
+
   const [showNoteOptions, setShowNoteOptions] = useState(false);
   const [searchInputVal, setSearchInputVal] = useState("");
 
@@ -35,14 +43,14 @@ function NotesCategory({ categoryName, categoryId }: NotesCategoryProps) {
   const changeSearchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInputVal(e.target.value);
   };
+
   return (
     <Col
       id={`${categoryName}`}
       key={`category_${categoryId}`}
-      className="col-sm-5 rounded mb-3 p-4 d-flex flex-wrap flex-column"
+      className={`${styles.note__container} col-sm-5 rounded mb-3 p-4 d-flex flex-wrap flex-column`}
     >
-      <p className="d-flex mb-2">
-        {/* className={styles.note__container__para} */}
+      <p className={`${styles.note__container__para} d-flex mb-2`}>
         <span>{categoryName}</span>
         <OverlayTrigger
           overlay={<Tooltip id="tooltip-example">Show more options</Tooltip>}

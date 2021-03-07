@@ -1,4 +1,7 @@
 import React from "react";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import FormControl from "react-bootstrap/FormControl";
 
 interface NoteSearchFormProps {
   searchInputVal: string;
@@ -9,12 +12,20 @@ function NoteSearchForm({
   searchInputVal,
   setSearchInputVal,
 }: NoteSearchFormProps) {
-  // TODO: add bootstrap
   return (
-    <div>
-      <span className="mr-2">Search by :</span>
-      <input type="text" onChange={setSearchInputVal} value={searchInputVal} />
-    </div>
+    <Form.Row className="mt-2">
+      <Col className="col-sm-3">
+        <span>Search by :</span>
+      </Col>
+
+      <Col className="col-sm-9">
+        <FormControl
+          type="text"
+          onChange={setSearchInputVal}
+          value={searchInputVal}
+        />
+      </Col>
+    </Form.Row>
   );
 }
 

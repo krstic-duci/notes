@@ -4,10 +4,13 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import FormControl from "react-bootstrap/FormControl";
 import { Search, XSquare } from "react-bootstrap-icons";
+
+// Redux slice
 import { filterThroughCategories } from "../features/create-note/notesSlice";
 
 function NotesSearch() {
   const dispatch = useDispatch();
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const addSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,6 +22,7 @@ function NotesSearch() {
     setSearchQuery("");
     dispatch(filterThroughCategories(""));
   };
+
   return (
     <>
       <InputGroup className="my-5">
@@ -27,26 +31,22 @@ function NotesSearch() {
             <Search />
           </InputGroup.Text>
         </InputGroup.Prepend>
+
         <FormControl
-          placeholder="Enter search term..."
-          aria-label="Username"
+          placeholder="Search all categories and notes..."
           aria-describedby="basic-addon1"
           value={searchQuery}
           onChange={addSearchQuery}
         />
+
         <InputGroup.Append id="basic-addon2" onClick={defaultSearchVal}>
-          <InputGroup.Text>
+          <Button
+            disabled={searchQuery.length === 0}
+            variant={searchQuery.length === 0 ? "secondary" : "primary"}
+          >
             <XSquare />
-          </InputGroup.Text>
+          </Button>
         </InputGroup.Append>
-        {/* TODO: button should be disabled if length of a search field is 0 */}
-        <Button
-          className="ml-2"
-          disabled={searchQuery.length === 0}
-          variant={searchQuery.length === 0 ? "secondary" : "primary"}
-        >
-          Search
-        </Button>
       </InputGroup>
     </>
   );

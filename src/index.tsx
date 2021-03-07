@@ -4,8 +4,12 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import Spinner from "react-bootstrap/Spinner";
+
+// Components
 import App from "./App";
 import { store } from "./app/store";
+
+// Boostrap styling
 import "bootstrap/dist/css/bootstrap.min.css";
 
 let persistor = persistStore(store);

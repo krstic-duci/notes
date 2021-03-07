@@ -1,6 +1,5 @@
 export interface StateStore {
   categories: Notes;
-  error: string | null;
   filteredCategories: Note[];
 }
 

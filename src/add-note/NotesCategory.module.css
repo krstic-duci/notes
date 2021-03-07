@@ -1,0 +1,15 @@
+.note__container {
+  box-shadow: 0 0 8px #ccc;
+  position: relative;
+  border: 1px solid transparent;
+  transition: border 0.15s ease-in;
+}
+
+.note__container:hover {
+  border: 1px solid var(--info);
+}
+
+.note__container__para {
+  font-size: 30px;
+  font-weight: bold;
+}

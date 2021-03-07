@@ -6,13 +6,19 @@ import Col from "react-bootstrap/Col";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import { DashCircleFill } from "react-bootstrap-icons";
+
+// Redux slice
 import {
   deleteCategoryNote,
   editCategoryNote,
   updateCheckedNote,
   moveNoteFromTo,
 } from "../features/create-note/notesSlice";
+
+// Utils/Types
 import { Note, Notes } from "../utils/types";
+
+// Style
 import styles from "./NoteItem.module.css";
 
 function NoteItem({
@@ -51,9 +57,7 @@ function NoteItem({
     <Form onSubmit={(e) => e.preventDefault()}>
       <Form.Row className="align-items-center my-1">
         <Col className="col-sm-1">
-          <Form.Control
-            size="sm"
-            type="checkbox"
+          <Form.Check
             checked={note.isChecked}
             onChange={changeCheckedState(note.id)}
           />
