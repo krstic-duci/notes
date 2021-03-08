@@ -18,22 +18,15 @@ function NoteForm({ categoryName }: NoteFormProps) {
   const [inputVal, setInputVal] = useState("");
 
   const addCategoryNewNote = (categoryName: string) => () => {
-    console.log("is called");
-
     dispatch(addCategoryNote(categoryName, inputVal));
     setInputVal("");
   };
 
-  const addNoteKeyPress = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    categoryName: string
+  const addNoteKeyPress = (categoryName: string) => (
+    e: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (e.key === "Enter") {
-      // dispatch(addCategoryNote(categoryName, inputVal));
-      // setInputVal("");
-      // FIXME: function below is not working
-      console.log("called");
-      addCategoryNewNote(categoryName);
+      addCategoryNewNote(categoryName)();
     }
   };
 
@@ -50,9 +43,7 @@ function NoteForm({ categoryName }: NoteFormProps) {
             placeholder="Add things to do..."
             value={inputVal}
             onChange={inputValHandler}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
-              addNoteKeyPress(e, categoryName)
-            }
+            onKeyDown={addNoteKeyPress(categoryName)}
           />
         </Col>
 

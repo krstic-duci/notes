@@ -14,8 +14,10 @@ function NotesSearch() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const addSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    dispatch(filterThroughCategories(e.target.value));
+    const targetVal = e.target.value;
+
+    setSearchQuery(targetVal);
+    dispatch(filterThroughCategories(targetVal));
   };
 
   const defaultSearchVal = () => {

@@ -40,8 +40,8 @@ function NoteItem({
     dispatch(deleteCategoryNote(categoryName, itemId));
   };
 
-  // based on: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/16208
-  const editNoteById = (e: React.BaseSyntheticEvent, itemId: string) => {
+  // e type based on: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/16208
+  const editNoteById = (itemId: string) => (e: React.BaseSyntheticEvent) => {
     dispatch(editCategoryNote(categoryName, itemId, e.target.value));
   };
 
@@ -68,7 +68,7 @@ function NoteItem({
             className={styles.note__container__input}
             type="text"
             value={note.text}
-            onChange={(e) => editNoteById(e, note.id)}
+            onChange={editNoteById(note.id)}
           />
         </Col>
 

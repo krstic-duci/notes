@@ -16,6 +16,7 @@ import { selectFilteredCategories } from "./features/create-note/notesSlice";
 
 function App() {
   const filteredCategories = useSelector(selectFilteredCategories);
+
   return (
     <Container>
       {/* Heading */}

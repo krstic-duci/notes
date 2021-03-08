@@ -14,13 +14,16 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+
+// Reducers
 import notesReducer from "../features/create-note/notesSlice";
 
+// Redux persist config
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["categories"],
+  whitelist: ["categories"], // persist only state.categories
 };
 
 const persistedReducer = persistReducer(persistConfig, notesReducer);
